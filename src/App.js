@@ -12,30 +12,26 @@ function App() {
         roomId: null,
         userName: null,
         users: [],
-        messages: []
+        messages: [],
     })
 
     const onLogin = (obj) => {
-        dispatch({type: 'SET_AUTH', payload: obj})
-        socket.emit('ROOM:JOIN', obj)
+        dispatch({type: 'SET_AUTH', payload: obj});
+        socket.emit('ROOM:JOIN', obj);
         axios.get(`/rooms/${obj.roomId}`)
             .then(res => {
-                    dispatch({type: 'SET_USERS', payload: res.data.users})
-                    dispatch({type: 'SET_MESSAGES', payload: res.data.messages})
+                    dispatch({type: 'SET_USERS', payload: res.data.users});
+                    dispatch({type: 'SET_MESSAGES', payload: res.data.messages});
                 }
             )
     }
-    const setUsers = (users) => dispatch({type: 'SET_USERS', payload: users})
-    const addMessage = (message) => {
-        dispatch({
-            type: 'NEW_MESSAGE',
-            payload: message,
-        });
-    };
+    const setUsers = (users) => dispatch({type: 'SET_USERS', payload: users});
+    const addMessage = (message) => dispatch({type: 'NEW_MESSAGE', payload: message});
+
     React.useEffect(() => {
-        socket.on('ROOM:JOINED', setUsers)
-        socket.on('ROOM:LEAVE', setUsers)
-        socket.on('ROOM:NEW_MESSAGE', addMessage)
+        socket.on('ROOM:JOINED', setUsers);
+        socket.on('ROOM:LEAVE', setUsers);
+        socket.on('ROOM:SET_NEW_MESSAGE', addMessage);
     }, [])
     return (
         <div className='wrapper'>
@@ -47,7 +43,10 @@ function App() {
                     onAddMessage={addMessage}
                     roomId={state.roomId}
                 />
-                : <JoinBlock onLogin={onLogin} isAuth={state.isAuth}/>}
+                : <JoinBlock
+                    onLogin={onLogin}
+                    isAuth={state.isAuth}
+                />}
         </div>
     );
 }
