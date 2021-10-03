@@ -26,7 +26,7 @@ export const JoinBlock = ({onLogin, isAuth}) => {
             <button
                 disabled={isAuth}
                 onClick={sendData}
-                className="btn btn-success"
+                className="btn btn-primary"
             >{isAuth ? 'ВХОД...' : 'ВОЙТИ'}</button>
         </div>
     );

@@ -4,9 +4,14 @@ import classNames from "classnames";
 
 export const Chat = ({users, messages, userName, roomId, onAddMessage}) => {
     const [messageValue, setMessageValue] = React.useState('');
+    const [visible,setVisible] = React.useState(window.innerWidth >= 768)
     const messagesRef = React.useRef(null);
-
+    const swapVisible = (e) =>{
+        e.preventDefault()
+        setVisible(prev=>!prev)
+    }
     const onSendMessage = () => {
+        if(messageValue==='') return
         socket.emit('ROOM:NEW_MESSAGE', {
             userName,
             roomId,
@@ -22,14 +27,16 @@ export const Chat = ({users, messages, userName, roomId, onAddMessage}) => {
 
     return (
         <div className="chat">
-            <div className="chat-users">
-                Комната: <b>{roomId}</b>
+            <div className={visible?'chat-users chat-users--active':'chat-users'}>
+                <p>Комната: <b>{roomId}</b></p>
                 <hr/>
-                <b>Онлайн: {users.length}</b>
+                <p>Онлайн:<b> {users.length}</b></p>
                 <ul>
                     {users.map((name, index) => (
                         <li className={name === userName ? 'current-user--active' : 'current-user'}
-                            key={name + index}>{name}</li>
+                            key={name + index}>
+                            {name === userName ? `Вы: ${name}` : name}
+                        </li>
                     ))}
                 </ul>
             </div>
@@ -52,11 +59,16 @@ export const Chat = ({users, messages, userName, roomId, onAddMessage}) => {
               value={messageValue}
               onChange={(e) => setMessageValue(e.target.value)}
               className="form-control"
-              rows="5"/>
-                    <button onClick={onSendMessage} style={{width: '200px', left: 0}} type="button"
+              rows={5}/>
+                    <div className="btns">
+                        <button
+                            onClick={onSendMessage}
+                            type="button"
                             className="btn btn-primary">
-                        Отправить
-                    </button>
+                            Отправить
+                        </button>
+                        <button className={'info btn btn-outline'} onClick={swapVisible}>О комнате</button>
+                    </div>
                 </form>
             </div>
         </div>
