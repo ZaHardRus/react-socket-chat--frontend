@@ -1,5 +1,4 @@
 import React from 'react';
-import './JoinBlock.css';
 import axios from "axios";
 
 export const JoinBlock = ({onLogin, isAuth}) => {
@@ -16,12 +15,11 @@ export const JoinBlock = ({onLogin, isAuth}) => {
         axios.post('./rooms', form)
             .then(() => onLogin(form))
             .catch(err => alert('Введен неверный пароль от комнаты'))
-
     }
     return (
         <div className="join-block">
             <input value={roomId} onChange={e => setRoomId(e.target.value)} placeholder="Room ID"/>
-            <input value={password} onChange={e => setPassword(e.target.value)} placeholder="Password"/>
+            <input value={password} type={'password'} onChange={e => setPassword(e.target.value)} placeholder="Password"/>
             <input value={userName} onChange={e => setUserName(e.target.value)} placeholder="Ваше имя"/>
             <button
                 disabled={isAuth}

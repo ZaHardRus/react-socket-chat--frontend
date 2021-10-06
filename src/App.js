@@ -17,13 +17,18 @@ function App() {
 
     const onLogin = (obj) => {
         dispatch({type: 'SET_AUTH', payload: obj});
-        socket.emit('ROOM:JOIN', obj);
-        axios.get(`/rooms/${obj.roomId}`)
-            .then(res => {
-                    dispatch({type: 'SET_USERS', payload: res.data.users});
-                    dispatch({type: 'SET_MESSAGES', payload: res.data.messages});
-                }
-            )
+        try {
+            socket.emit('ROOM:JOIN', obj);
+            axios.get(`/rooms/${obj.roomId}`)
+                .then(res => {
+                        dispatch({type: 'SET_USERS', payload: res.data.users});
+                        dispatch({type: 'SET_MESSAGES', payload: res.data.messages});
+                    }
+                )
+        } catch (e) {
+            alert('Произошла ошибка при подключении...')
+        }
+
     }
     const setUsers = (users) => dispatch({type: 'SET_USERS', payload: users});
     const addMessage = (message) => dispatch({type: 'NEW_MESSAGE', payload: message});
