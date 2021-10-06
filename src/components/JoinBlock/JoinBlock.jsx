@@ -12,7 +12,7 @@ export const JoinBlock = ({onLogin, isAuth}) => {
             return
         }
         const form = {roomId, userName, password}
-        axios.post('.https://zahard-chat--backend.herokuapp.com/rooms', form)
+        axios.post('https://zahard-chat--backend.herokuapp.com/rooms', form)
             .then(() => onLogin(form))
             .catch(err => alert('Введен неверный пароль от комнаты'))
     }
