@@ -19,7 +19,7 @@ function App() {
         dispatch({type: 'SET_AUTH', payload: obj});
         try {
             socket.emit('ROOM:JOIN', obj);
-            axios.get(`/rooms/${obj.roomId}`)
+            axios.get(`https://zahard-chat--backend.herokuapp.com/rooms/${obj.roomId}`)
                 .then(res => {
                         dispatch({type: 'SET_USERS', payload: res.data.users});
                         dispatch({type: 'SET_MESSAGES', payload: res.data.messages});
